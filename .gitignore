@@ -1,0 +1,16 @@
+# Build Maven e verifiche locali
+/target/
+*.class
+*.log
+
+# Configurazioni personali degli IDE
+/.idea/
+/.vscode/
+/.settings/
+/.classpath
+/.project
+*.iml
+
+# File del sistema operativo
+.DS_Store
+Thumbs.db
