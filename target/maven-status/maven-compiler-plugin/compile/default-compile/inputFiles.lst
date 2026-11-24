@@ -1,8 +1,3 @@
-C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\config\CustomUserDetailsService.java
-C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\config\DataSeeder.java
-C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\config\SecurityConfig.java
-C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\controller\HomeController.java
-C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\dto\AttrezzaturaSoldatoDTO.java
 C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\model\Attrezzatura.java
 C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\model\DettaglioOrdine.java
 C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\model\enums\PrioritaTicket.java
@@ -27,10 +22,3 @@ C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platfor
 C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\repository\SessioneGiocoRepository.java
 C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\repository\TicketSupportoRepository.java
 C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\repository\UtenteRepository.java
-C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\service\AttrezzaturaService.java
-C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\service\BusinessException.java
-C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\service\OrdineService.java
-C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\service\PartnerEventoService.java
-C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\service\PrenotazioneService.java
-C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\service\TicketSupportoService.java
-C:\Users\lucio\Desktop\Uni\IS\progetto\Project\src\main\java\it\pewpewmf\platform\service\UtenteService.java
