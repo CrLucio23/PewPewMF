@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#1A1A1A">
+    <meta name="description" content="PEWPEW MF: esplora il tuo equipaggiamento softair, dalla testa agli anfibi. Seleziona una zona dell'operatore e scopri acquisto e noleggio.">
+    <title>PEWPEW MF | La tua armeria softair</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <script th:src="@{/js/soldier-interactive.js}" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Salta al contenuto</a>
+<header th:replace="~{fragments/navbar :: navbar}"></header>
+
+<section id="hero-intro-overlay" class="intro-overlay" aria-label="Preparazione operatore" hidden>
+    <div class="intro-heading"><span>PEWPEW MF</span><span>La partita inizia prima del campo.</span></div>
+    <div class="intro-operator"><svg th:replace="~{index :: operatore}"></svg></div>
+    <button id="enter-armory" class="enter-armory" type="button">
+        <span>ENTRA NELL'ARMERIA</span>
+        <small>Esplora l'equipaggiamento tattico</small>
+        <span class="enter-arrow" aria-hidden="true">↗</span>
+    </button>
+    <p class="intro-caption">Casco. Protezioni. Replica. Pronto a scendere in campo.</p>
+</section>
+
+<main id="main-content" class="armory-shell" tabindex="-1">
+    <div class="armory-heading">
+        <div>
+            <h1>Preparati.<br>Lascia il segno.</h1>
+            <p>Il tuo setup softair, dalla testa agli anfibi.</p>
+        </div>
+        <button id="replay-intro" class="text-button" type="button" hidden>Rivedi Intro <span aria-hidden="true">↻</span></button>
+    </div>
+
+    <section id="interactive-soldier-stage" class="armory-stage" aria-label="Esplora l'equipaggiamento dell'operatore">
+        <div class="soldier-column">
+            <div class="stage-topline"><span>Operatore equipaggiato</span><span id="view-label">Vista intera</span></div>
+            <div class="soldier-viewport">
+                <div class="operator-backdrop" aria-hidden="true">MF</div>
+                <div id="soldier-camera" class="soldier-camera">
+                    <svg th:replace="~{index :: operatore}"></svg>
+                </div>
+                <div class="hotspots" role="group" aria-label="Zone del corpo">
+                    <button class="hotspot hotspot-head" type="button" data-zona="TESTA" aria-controls="equipment-panel" aria-pressed="false"><span class="radar" aria-hidden="true"></span><span class="hotspot-label">Testa</span></button>
+                    <button class="hotspot hotspot-chest" type="button" data-zona="BUSTO" aria-controls="equipment-panel" aria-pressed="false"><span class="radar" aria-hidden="true"></span><span class="hotspot-label">Busto</span></button>
+                    <button class="hotspot hotspot-weapons" type="button" data-zona="ARMI" aria-controls="equipment-panel" aria-pressed="false"><span class="radar" aria-hidden="true"></span><span class="hotspot-label">Armi</span></button>
+                    <button class="hotspot hotspot-legs" type="button" data-zona="GAMBE" aria-controls="equipment-panel" aria-pressed="false"><span class="radar" aria-hidden="true"></span><span class="hotspot-label">Gambe</span></button>
+                    <button class="hotspot hotspot-accessories" type="button" data-zona="ACCESSORI" aria-controls="equipment-panel" aria-pressed="false"><span class="radar" aria-hidden="true"></span><span class="hotspot-label">Accessori</span></button>
+                </div>
+            </div>
+            <div class="stage-bottomline">
+                <p>Seleziona una zona. Componi il tuo equipaggiamento.</p>
+                <button id="reset-zoom" class="outline-button" type="button" hidden>Vista Intera <span aria-hidden="true">↙</span></button>
+            </div>
+        </div>
+
+        <aside id="equipment-panel" class="equipment-panel" aria-labelledby="panel-title" th:data-api-base="@{/api/soldato/zona/}" th:data-catalog-base="@{/catalogo}" th:data-detail-base="@{/catalogo/articolo/}">
+            <div class="panel-heading">
+                <h2 id="panel-title" tabindex="-1">Ogni dettaglio<br>fa la differenza.</h2>
+                <button id="close-panel" class="close-panel" type="button" aria-label="Chiudi equipaggiamento e ripristina vista intera" hidden>×</button>
+            </div>
+            <p id="panel-description">Scegli una zona dell'operatore per scoprire repliche, protezioni e accessori. Acquista il tuo setup o noleggialo per la prossima sessione.</p>
+            <p id="equipment-status" class="equipment-status" role="status" aria-live="polite"></p>
+            <div id="equipment-list" class="equipment-list" aria-busy="false"></div>
+            <button id="retry-equipment" class="outline-button" type="button" hidden>Riprova caricamento</button>
+            <div id="panel-empty-state" class="panel-empty-state">
+                <span class="selection-symbol" aria-hidden="true">+</span>
+                <p>Il tuo prossimo setup<br>parte da qui.</p>
+                <a class="primary-button" th:href="@{/catalogo}">Esplora il catalogo <span aria-hidden="true">↗</span></a>
+            </div>
+            <a id="filtered-catalog" class="primary-button catalog-action" th:href="@{/catalogo}" hidden>Filtra tutto il Catalogo</a>
+        </aside>
+    </section>
+    <noscript><p class="noscript-message">Per usare lo zoom interattivo abilita JavaScript, oppure <a th:href="@{/catalogo}">esplora il catalogo completo</a>.</p></noscript>
+    <footer class="armory-footer"><span>PEWPEW MF / Softair &amp; Mil-Sim</span><a th:href="@{/prenotazioni}">Il setup è pronto? Prenota la tua sessione ↗</a></footer>
+</main>
+<div hidden>
+<svg th:fragment="operatore" class="operator-svg" viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g class="operator-outline" stroke-linejoin="round" stroke-linecap="round">
+        <!-- Uniforme, anfibi e protezioni articolate -->
+        <path class="uniform" d="m146 338-15 72-4 103-13 130 57 5 25-132 7-78 15 85 17 126 57-4-15-143-6-97-18-68Z"/>
+        <path class="fabric-shadow" d="m188 382-21 110-20 122 24 3 25-114 7-65 15 85 17 126 20-2-15-150-18-114Z"/>
+        <path class="fabric-seam" d="m140 404 36 9-5 62-39-4Zm90 9 36-9 6 66-37 5Z"/>
+        <path class="fabric-light" d="m140 419 27 5-3 12-26-4Zm99 5 25-5 2 13-25 4Z"/>
+        <path class="fabric-shadow" d="m133 526 38 5-4 52-38-5Zm98 5 40-5 4 52-38 5Z"/>
+        <path class="armor" d="m132 514 42 5 1 39-15 17-30-10-6-26Zm99 5 42-5 8 25-6 26-30 10-15-17Z"/>
+        <path class="armor-detail" d="m137 530 22 3-2 22-18-3Zm108 3 21-3 1 22-18 3Z"/>
+        <path class="boot" d="m118 621 55 4-3 34-5 20-65 2-9-12 14-21Zm116 4 52-4 5 26 19 22-9 12-66-2-5-20Z"/>
+        <path class="boot-detail" d="m101 666 63-2m-68 11 67-2m76-9 58 2m-59 7 64 2m-178-38 30 4m-32 5 30 3m95-8 28-4m-27 12 30-3"/>
+        <!-- Bras et manches -->
+        <path class="uniform" d="m146 171-29 7-30 54-20 65 20 30 36-3 22-74 18-37Zm108 0 30 8 26 48 22 71-22 30-35-9-22-68-18-38Z"/>
+        <path class="fabric-shadow" d="m103 208 23 14-18 45-28 12m198-57 21-15 21 58-27 13"/>
+        <path class="armor" d="m76 277 33 7-7 33-25-3-10-17Zm218 7 32-8 7 22-13 17-24 2Z"/>
+        <path class="patch" d="m111 200 20 9-9 27-22-10Z"/>
+        <path class="patch-mark" d="m111 210 11 5m-14 4 11 5"/>
+        <!-- Torse, ceinture et équipements -->
+        <path class="uniform" d="m165 151-26 23-3 90 10 91 108 1 12-92-6-89-25-24Z"/>
+        <path class="collar" d="m165 151 36 31 35-31-10-17h-49Z"/>
+        <g class="gear-vest">
+            <path class="vest" d="m149 173 23-12 14 35h29l15-35 23 12 7 131-15 44h-90l-15-44Z"/>
+            <path class="armor" d="m176 185 11 24h27l11-24 19 17 2 65-17 21h-58l-17-21 3-65Z"/>
+            <path class="vest-webbing" d="M164 227h73m-75 14h78m-79 15h79m-76 15h72"/>
+            <path class="patch" d="M181 214h39v20h-39Z"/>
+            <path class="patch-mark" d="M188 220h25m-25 7h15"/>
+            <path class="pouch" d="m157 281 24 1v53l-25-3Zm29 1h26v55h-26Zm31 0 24-1 1 51-25 3Z"/>
+            <path class="vest-webbing" d="M161 293h15m15 0h15m17 0h13m-70 9v22m30-22v24m29-24v22"/>
+            <path class="buckle" d="M189 339h24v14h-24Z"/>
+        </g>
+        <path class="belt" d="m140 350 120 1-1 19-117-1Z"/>
+        <path class="buckle" d="M188 350h25v19h-25Z"/>
+        <path class="pouch" d="m133 356-22 4 1 39 23-3Zm130 2 20 1 7 43-24-4Z"/>
+        <path class="fabric-seam" d="m145 380 37 8m38 0 34-8"/>
+        <g class="gear-radio">
+            <path class="radio" d="m126 286 24-3 5 57-25 3Z"/>
+            <path class="radio-antenna" d="m130 287-7-56"/>
+            <path class="radio-screen" d="m132 293 13-1 1 13-13 1Z"/>
+            <path class="radio-detail" d="m135 313 10-1m-9 7 10-1m-9 7 10-1"/>
+            <path class="radio-cable" d="M130 287c-30-62 9-82 31-80"/>
+        </g>
+        <!-- Casque, lunettes et masque -->
+        <path class="neck" d="M178 126h45v37l-23 15-22-16Z"/>
+        <path class="face" d="m157 78 10 56 17 20h32l19-23 9-53-43-22Z"/>
+        <g class="gear-helmet">
+            <path class="helmet" d="M149 92V69c0-35 22-54 53-54s52 21 52 53v25l-25-4-8-7h-42l-8 7Z"/>
+            <path class="helmet-light" d="M160 65c4-25 20-38 41-38 19 0 35 10 42 34l-28-7-31 1Z"/>
+            <path class="helmet-detail" d="m178 22-6 37m53-36 7 35m-78 13 24-5m48 0 24 5"/>
+            <path class="armor" d="M187 48h28v28h-28Z"/>
+            <path class="buckle" d="M195 55h12v13h-12Z"/>
+            <path class="armor" d="m148 82 14-1 6 31-12 5-9-14Zm91-1 15 1 1 21-10 14-12-5Z"/>
+            <path class="helmet-strap" d="m159 109 17 34 24 10 23-11 20-34"/>
+        </g>
+        <path class="goggle-frame" d="m160 86 39-6 39 6-5 28-25 3-9-7-9 7-25-3Z"/>
+        <path class="goggle-lens" d="m168 92 25-4-1 15-7 6-14-2Zm37-4 25 4-3 15-14 2-7-6Z"/>
+        <path class="lens-reflection" d="m172 95 14-3m28 1 10 2"/>
+        <path class="mask" d="m173 118 26-9 28 9-5 22-22 11-23-11Z"/>
+        <path class="mask-mesh" d="M182 123h36m-34 7h32m-28 7h24m-19-19v23m10-24v25m10-21v17"/>
+        <g class="gear-hud">
+            <path class="hud" d="M166 93h25v13h-21m36-13h22l-3 13h-17"/>
+            <path class="hud-reticle" d="M177 95v9m-4-5h8m31-1h8"/>
+        </g>
+        <!-- Réplique ASG, sangle et gants -->
+        <path class="sling" d="M160 179 276 321l-8 7L153 187Z"/>
+        <g class="gear-rifle">
+            <g transform="rotate(-15 210 292)">
+                <path class="rifle" d="M99 272h37v-9h94v8h43v7h64v13h-64v11h-45l-6 13h-70v-12h-24l-10 17H98l10-30Z"/>
+                <path class="rifle-detail" d="M139 270h86v7h-86Zm97 10h35v12h-35Zm41 1h42v6h-42Z"/>
+                <path class="rifle" d="m169 312 25 1-5 43-26-3Zm37 0h17l-4 25-12-1-7-14Z"/>
+                <path class="rifle-detail" d="m172 323 13 1m-14 9 13 1m-14 9 13 1"/>
+                <path class="rifle" d="M169 262v-15h26v15m-20-16v-7h14v7"/>
+                <path class="optic" d="M174 248h15v10h-15Z"/>
+                <path class="rifle-detail" d="M144 285h44m10 0h19m-65 14h26"/>
+                <path class="safety-tip" d="M332 278h9v14h-9Z"/>
+            </g>
+            <path class="glove" d="m95 290 27-4 20 14-5 18-15 8-23-10-10-13Z"/>
+            <path class="glove" d="m266 277 16-13 18 9 13 20-6 17-21 2-21-20Z"/>
+            <path class="glove-detail" d="m105 298 20 11m-24-3 20 11m158-37 14 13m-20-8 14 13"/>
+        </g>
+    </g>
+</svg>
+</div>
+</body>
+</html>

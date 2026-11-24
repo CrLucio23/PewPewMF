@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<nav th:fragment="navbar" class="navbar site-nav" aria-label="Navigazione principale">
+    <div class="nav-shell">
+        <a class="brand" th:href="@{/}" aria-label="PEWPEW MF — Home">
+            <img data-brand-logo th:data-logo-src="@{/images/logo-pewpew.png}" alt="PEWPEW MF" width="148" height="44" hidden>
+            <svg data-brand-fallback viewBox="0 0 190 48" width="166" height="44" role="img" aria-label="PEWPEW MF">
+                <path class="brand-mark" d="M2 12 20 3 38 12v21L20 45 2 33Z"/>
+                <path class="brand-ink" d="M9 18 20 12 31 18v10l-7 5v-6h-8v6l-7-5Zm5 1v5h5v-3Zm12 0-5 2v3h5Z"/>
+                <text x="47" y="25" class="brand-word">PEWPEW</text>
+                <text x="48" y="42" class="brand-subword">MF / SOFTAIR</text>
+            </svg>
+        </a>
+        <button id="nav-toggle" class="nav-toggle" type="button" aria-controls="nav-links" aria-expanded="false">
+            Menu <span aria-hidden="true">☰</span>
+        </button>
+        <div id="nav-links" class="nav-links">
+            <a th:href="@{/}" aria-current="page">Armeria / Soldato</a>
+            <a th:href="@{/catalogo}">Catalogo Completo</a>
+            <a th:href="@{/prenotazioni}">Prenota Sessione</a>
+            <a th:href="@{/partner}">Partner &amp; Eventi</a>
+            <a class="support-link" th:href="@{/ticket}">Supporto 24/7 <span class="operational"><i aria-hidden="true"></i> OPERATIVO</span></a>
+            <a class="cart-link" th:href="@{/carrello}">Carrello <span class="cart-count" th:text="${session.carrello != null ? #maps.size(session.carrello) : 0}">0</span></a>
+            <a class="account-link" sec:authorize="isAuthenticated()" th:href="@{/account}">Account</a>
+            <a class="account-link" sec:authorize="!isAuthenticated()" th:href="@{/login}">Accedi</a>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

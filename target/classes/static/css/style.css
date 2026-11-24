@@ -1,0 +1,194 @@
+:root {
+    --color-red-mascot: #C92A2A;
+    --color-military-green: #4E5D3F;
+    --color-gold-orange: #F08C00;
+    --color-cream-text: #EED9B3;
+    --color-dark-mountain: #4A1E1E;
+    --color-black-outline: #1A1A1A;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--color-black-outline); color: var(--color-cream-text); font-family: "Arial", "Helvetica", sans-serif; font-size: 16px; line-height: 1.5; }
+body.intro-active { overflow: hidden; }
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--color-gold-orange); }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; color: inherit; }
+button, .primary-button, .account-link { transition: background-color .2s ease, color .2s ease, border-color .2s ease; }
+button:focus-visible, a:focus-visible { outline: 3px solid var(--color-gold-orange); outline-offset: 5px; }
+button:disabled { cursor: wait; }
+.skip-link { position: fixed; top: 10px; left: 10px; z-index: 300; padding: 12px 20px; background: var(--color-cream-text); color: var(--color-black-outline); transform: translateY(-160%); }
+.skip-link:focus { transform: none; }
+.site-nav { position: sticky; top: 0; z-index: 100; padding: 0; background: var(--color-black-outline); border-bottom: 2px solid var(--color-gold-orange); }
+.nav-shell { width: 100%; max-width: 1800px; margin: auto; min-height: 84px; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { flex-shrink: 0; }
+.brand img { max-width: 166px; object-fit: contain; }
+.brand-mark { fill: var(--color-red-mascot); }
+.brand-ink, .brand-word, .brand-subword { fill: var(--color-cream-text); }
+.brand-word { font: 900 25px Arial, sans-serif; letter-spacing: -1px; }
+.brand-subword { font: 700 10px Arial, sans-serif; letter-spacing: 2px; }
+.nav-links { display: flex; align-items: center; gap: clamp(12px, 1.5vw, 26px); font-size: 14px; font-weight: 600; }
+.nav-links > a { padding: 8px 0; }
+.nav-links > a[aria-current] { color: var(--color-gold-orange); }
+.support-link { display: flex; flex-direction: column; gap: 2px; }
+.operational { display: flex; align-items: center; gap: 5px; font-size: 10px; }
+.operational i { width: 8px; height: 8px; background: var(--color-military-green); border-radius: 50%; animation: operational-pulse 2s ease-in-out infinite; }
+.cart-link { display: flex; align-items: center; gap: 7px; }
+.cart-count { display: inline-grid; place-items: center; min-width: 23px; height: 23px; padding: 0 5px; background: var(--color-red-mascot); color: var(--color-cream-text); border-radius: 50%; font-size: 12px; }
+.nav-links > .account-link { background: var(--color-red-mascot); padding: 11px 17px; color: var(--color-cream-text); }
+.account-link:hover { background: var(--color-dark-mountain); }
+.nav-toggle { display: none; background: none; border: 1px solid var(--color-military-green); padding: 8px 12px; }
+.armory-shell { max-width: 1600px; margin: auto; padding: 44px 32px 20px; }
+.armory-heading { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; gap: 20px; }
+h1 { margin: 0; font-size: clamp(48px, 5.4vw, 82px); font-weight: 900; letter-spacing: -.055em; line-height: .97; }
+.armory-heading p { margin: 18px 0 0; font-size: 18px; }
+.text-button { padding: 8px 0; background: none; border: 0; white-space: nowrap; }
+.text-button span { display: inline-block; padding-left: 8px; color: var(--color-gold-orange); }
+.text-button:hover { color: var(--color-gold-orange); }
+.armory-stage { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(330px, .8fr); align-items: stretch; gap: 36px; }
+.soldier-column { min-width: 0; display: flex; flex-direction: column; }
+.stage-topline, .stage-bottomline { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+.stage-topline { font-size: 14px; }
+#view-label { color: var(--color-gold-orange); }
+.soldier-viewport { position: relative; height: clamp(460px, 42vw, 560px); overflow: hidden; isolation: isolate; background: var(--color-military-green); margin: 16px 0; }
+.operator-backdrop { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: clamp(180px, 29vw, 440px); line-height: .8; letter-spacing: -.1em; font-weight: 900; color: var(--color-black-outline); opacity: .24; pointer-events: none; }
+.soldier-camera, .hotspots { position: absolute; height: 96%; aspect-ratio: 4 / 7; top: 2%; left: 50%; transform: translateX(-50%); }
+.soldier-camera { transition: transform .7s cubic-bezier(.22, 1, .36, 1), transform-origin .7s cubic-bezier(.22, 1, .36, 1); transform-origin: 50% 50%; }
+.operator-svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.operator-outline { stroke: var(--color-black-outline); stroke-width: 3; }
+.uniform, .helmet, .vest, .pouch, .glove { fill: var(--color-military-green); }
+.fabric-shadow, .armor, .boot, .collar, .belt, .radio, .rifle, .goggle-frame, .sling { fill: var(--color-black-outline); }
+.fabric-light, .fabric-seam, .helmet-light, .neck, .face { fill: var(--color-cream-text); }
+.fabric-light, .helmet-light { fill-opacity: .28; }
+.fabric-seam { fill-opacity: .12; }
+.armor-detail, .boot-detail, .rifle-detail { fill: var(--color-military-green); stroke: var(--color-military-green); stroke-width: 2; }
+.vest-webbing, .helmet-detail, .glove-detail { fill: none; stroke: var(--color-black-outline); stroke-width: 2; }
+.patch, .mask { fill: var(--color-dark-mountain); }
+.patch-mark { fill: none; stroke: var(--color-cream-text); stroke-width: 2; }
+.buckle, .optic, .safety-tip { fill: var(--color-gold-orange); }
+.helmet-strap, .mask-mesh, .radio-detail { fill: none; stroke: var(--color-black-outline); stroke-width: 2; }
+.goggle-lens, .radio-screen { fill: var(--color-gold-orange); }
+.lens-reflection { stroke: var(--color-cream-text); stroke-width: 3; }
+.radio-antenna, .radio-cable { fill: none; stroke: var(--color-black-outline); stroke-width: 4; }
+.hud { fill: none; stroke: var(--color-gold-orange); stroke-width: 2; }
+.hud-reticle { fill: none; stroke: var(--color-cream-text); stroke-width: 1.5; }
+.hotspots { pointer-events: none; }
+.hotspot { position: absolute; display: flex; align-items: center; gap: 9px; padding: 5px; border: 0; background: none; transform: translate(-50%, -50%); cursor: pointer; pointer-events: auto; min-height: 44px; white-space: nowrap; }
+.hotspot-head { top: 15%; left: 50%; }
+.hotspot-chest { top: 38%; left: 50%; }
+.hotspot-weapons { top: 48%; left: 62%; }
+.hotspot-legs { top: 78%; left: 50%; }
+.hotspot-accessories { top: 52%; left: 35%; flex-direction: row-reverse; transform: translate(calc(-100% + 20px), -50%); }
+.radar { position: relative; display: block; flex: 0 0 28px; width: 28px; height: 28px; border: 2px solid var(--color-gold-orange); border-radius: 50%; background: var(--color-black-outline); }
+.radar::before { content: ""; position: absolute; inset: 7px; background: var(--color-red-mascot); border-radius: 50%; }
+.radar::after { content: ""; position: absolute; inset: -7px; border: 1px solid var(--color-gold-orange); border-radius: 50%; animation: radar-pulse 2.4s ease-out infinite; }
+.hotspot-label { font-size: 14px; font-weight: 700; background: var(--color-black-outline); padding: 5px 9px; }
+.hotspot:hover .hotspot-label, .hotspot[aria-pressed="true"] .hotspot-label { background: var(--color-red-mascot); }
+.is-zoomed .hotspots { top: 16px; left: 12px; height: auto; aspect-ratio: auto; transform: none; display: flex; flex-direction: column; align-items: flex-start; gap: 5px; }
+.is-zoomed .hotspot { position: static; transform: none; flex-direction: row; }
+.is-zoomed .radar::after { animation: none; opacity: 0; }
+.stage-bottomline { min-height: 46px; font-size: 14px; }
+.stage-bottomline p { margin: 0; max-width: 35ch; }
+.outline-button { padding: 10px 14px; background: var(--color-black-outline); color: var(--color-cream-text); border: 1px solid var(--color-gold-orange); white-space: nowrap; }
+.outline-button:hover { background: var(--color-red-mascot); }
+.equipment-panel { background: var(--color-dark-mountain); border: 1px solid var(--color-gold-orange); padding: clamp(22px, 2.4vw, 38px); display: flex; flex-direction: column; min-width: 0; }
+.panel-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.panel-heading h2 { min-width: 0; overflow-wrap: anywhere; font-size: clamp(30px, 3vw, 46px); letter-spacing: -.04em; font-weight: 800; line-height: 1.05; margin: 0 0 22px; }
+#panel-description { max-width: 42ch; margin: 0 0 16px; }
+.close-panel { border: 1px solid var(--color-military-green); background: var(--color-black-outline); width: 44px; height: 44px; flex-shrink: 0; font-size: 28px; line-height: 1; }
+.close-panel:hover { background: var(--color-red-mascot); }
+.equipment-status { margin: 0; font-size: 15px; }
+.equipment-status:not(:empty) { margin-bottom: 18px; }
+.panel-empty-state { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 28px 0; }
+.selection-symbol { font-size: 100px; line-height: 1; font-weight: 300; color: var(--color-gold-orange); }
+.panel-empty-state p { font-size: 24px; line-height: 1.2; margin: 25px 0 35px; }
+.primary-button { display: inline-flex; justify-content: space-between; align-items: center; gap: 24px; padding: 16px 20px; border: 1px solid var(--color-red-mascot); background: var(--color-red-mascot); color: var(--color-cream-text); font-size: 15px; font-weight: 700; }
+.primary-button:hover { background: var(--color-black-outline); color: var(--color-cream-text); border-color: var(--color-gold-orange); }
+.equipment-list { display: grid; gap: 20px; }
+.equipment-card { display: grid; grid-template-columns: 94px minmax(0, 1fr); gap: 16px; padding: 18px 0; border-top: 1px solid var(--color-military-green); }
+.equipment-image { width: 94px; height: 108px; object-fit: contain; background: var(--color-black-outline); }
+.image-fallback { display: grid; place-items: center; padding: 10px; text-align: center; font-size: 13px; }
+.equipment-card h3 { font-size: 18px; font-weight: 700; line-height: 1.25; margin: 0 0 6px; overflow-wrap: anywhere; }
+.equipment-partner { font-size: 13px; margin: 0 0 12px; }
+.equipment-prices { display: flex; flex-wrap: wrap; gap: 12px 22px; margin: 0 0 12px; }
+.equipment-prices div { display: flex; flex-direction: column; }
+.equipment-prices dt { font-size: 12px; font-weight: 400; }
+.equipment-prices dd { color: var(--color-gold-orange); margin: 0; font-size: 18px; font-weight: 700; }
+.detail-link { text-decoration: underline; text-underline-offset: 4px; font-size: 14px; }
+.catalog-action { margin-top: auto; padding-top: 16px; }
+.equipment-list:not(:empty) + button + .panel-empty-state + .catalog-action { margin-top: 28px; }
+.armory-footer { display: flex; justify-content: space-between; gap: 24px; font-size: 13px; padding-top: 36px; padding-bottom: 12px; }
+.armory-footer a { text-align: right; }
+.intro-overlay { position: fixed; inset: 0; z-index: 90; height: 100vh; height: 100dvh; overflow: hidden; background: var(--color-black-outline); opacity: 1; transform: scale(1); transition: opacity .65s ease, transform .65s cubic-bezier(.22, 1, .36, 1); }
+.intro-heading { position: absolute; top: 110px; left: 32px; right: 32px; display: flex; justify-content: space-between; gap: 16px; font-size: 16px; }
+.intro-heading span:first-child { font-weight: 900; }
+.intro-operator { position: absolute; height: 82%; aspect-ratio: 4 / 7; left: 50%; bottom: 0; transform: translateX(-50%); }
+.enter-armory { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: min(510px, calc(100% - 40px)); padding: 30px 56px 30px 28px; text-align: left; background: rgb(26 26 26 / .55); backdrop-filter: blur(8px); border: 2px solid var(--color-gold-orange); color: var(--color-cream-text); }
+.enter-armory > span:first-child { display: block; font-size: clamp(20px, 2.5vw, 30px); font-weight: 900; letter-spacing: -.025em; }
+.enter-armory small { display: block; margin-top: 7px; font-size: 15px; }
+.enter-arrow { position: absolute; right: 24px; top: 26px; font-size: 30px; color: var(--color-gold-orange); }
+.enter-armory:hover { background: var(--color-red-mascot); }
+.intro-caption { position: absolute; bottom: 24px; left: 20px; right: 20px; text-align: center; font-size: 14px; background: var(--color-black-outline); padding: 8px; }
+.intro-overlay.is-leaving { opacity: 0; transform: scale(1.05); pointer-events: none; }
+.intro-overlay .gear-helmet { animation: fit-helmet 1s .15s both; }
+.intro-overlay .gear-vest { animation: close-vest .8s .85s both; transform-origin: 200px 260px; }
+.intro-overlay .gear-rifle { animation: shoulder-rifle .9s 1.5s both; transform-origin: 200px 290px; }
+.intro-overlay .gear-hud { animation: activate-hud .7s 2.3s both; }
+.noscript-message { margin-top: 20px; }
+.noscript-message a { text-decoration: underline; }
+body.is-background .radar::after, body.is-background .operational i { animation-play-state: paused; }
+
+@keyframes fit-helmet { from { opacity: 0; transform: translateY(-80px) rotate(-8deg); } to { opacity: 1; transform: none; } }
+@keyframes close-vest { from { opacity: .2; transform: scaleX(1.3); } to { opacity: 1; transform: none; } }
+@keyframes shoulder-rifle { from { opacity: 0; transform: translate(40px, 80px) rotate(20deg); } to { opacity: 1; transform: none; } }
+@keyframes activate-hud { 0%, 40%, 65% { opacity: 0; } 25%, 55%, 100% { opacity: 1; } }
+@keyframes radar-pulse { from { opacity: .8; transform: scale(.8); } to { opacity: 0; transform: scale(1.4); } }
+@keyframes operational-pulse { 50% { opacity: .45; } }
+
+@media (min-width: 1600px) { .nav-links { font-size: 15px; } }
+@media (max-width: 1199px) {
+    .nav-shell { padding: 12px 24px; flex-wrap: wrap; min-height: 76px; }
+    .nav-toggle { display: block; }
+    .nav-links { width: 100%; flex-wrap: wrap; justify-content: flex-start; gap: 12px 24px; padding: 8px 0; }
+    .nav-links.is-collapsed { display: none; }
+    .armory-shell { padding: 32px 24px 18px; }
+    .armory-stage { gap: 24px; grid-template-columns: minmax(0, 1fr) minmax(310px, .85fr); }
+}
+@media (max-width: 767px) {
+    .nav-shell { padding: 12px 16px; }
+    .nav-links { flex-direction: column; align-items: stretch; gap: 3px; max-height: calc(100dvh - 100px); overflow-y: auto; }
+    .support-link { flex-direction: row; align-items: center; justify-content: space-between; }
+    .nav-links > a { padding: 12px 4px; }
+    .armory-shell { padding: 30px 16px 14px; }
+    .armory-heading { display: block; margin-bottom: 24px; }
+    .armory-heading p { font-size: 16px; max-width: 25ch; }
+    h1 { font-size: clamp(42px, 9vw, 64px); }
+    .text-button { display: block; margin: 12px 0 0 auto; font-size: 13px; padding-top: 0; }
+    .armory-stage { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .soldier-viewport { height: 520px; }
+    .operator-backdrop { font-size: 270px; }
+    .equipment-panel { padding: 24px; scroll-margin-top: 96px; }
+    .panel-heading h2 { font-size: 34px; }
+    .panel-empty-state { padding: 12px 0 0; }
+    .panel-empty-state p { margin: 16px 0 24px; }
+    .selection-symbol { font-size: 70px; }
+    .stage-bottomline { font-size: 13px; }
+    .outline-button { padding: 10px; font-size: 13px; }
+    .armory-footer { flex-direction: column; gap: 8px; padding-top: 28px; }
+    .armory-footer a { text-align: left; }
+    .intro-heading { top: 100px; left: 20px; right: 20px; font-size: 14px; }
+    .intro-heading span:last-child { max-width: 20ch; text-align: right; }
+    .intro-operator { height: 76%; }
+}
+@media (max-width: 380px) {
+    .soldier-viewport { height: 470px; }
+    .equipment-card { grid-template-columns: 70px minmax(0, 1fr); gap: 12px; }
+    .equipment-image { width: 70px; height: 90px; }
+    .equipment-panel { padding: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    .intro-overlay.is-leaving { transform: none; }
+    .radar::after { display: none; }
+}
