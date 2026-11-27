@@ -44,3 +44,26 @@
 @media (prefers-reduced-motion: reduce) {
     .video-intro, .video-intro.is-leaving, .video-intro .enter-armory:hover { transform: none; transition: none; }
 }
+
+/* Open stage, precision markers and a quiet equipment surface. */
+.soldier-viewport { background: radial-gradient(circle,rgb(74 30 30 / .45) 0%,rgb(26 26 26 / 0) 70%); }
+.soldier-photo { mix-blend-mode: lighten; }
+.radar { position: relative; display: block; flex: 0 0 24px; width: 24px; height: 24px; border: 1.5px solid var(--color-gold-orange); border-radius: 50%; background: rgb(26 26 26 / .5); }
+.radar::before { content: ''; position: absolute; inset: 7px; border-radius: 50%; background: var(--color-red-mascot); }
+.radar::after { content: ''; position: absolute; inset: -5px; border: 1px solid var(--color-gold-orange); border-radius: 50%; animation: radar-pulse 2.8s ease-out infinite; }
+.hotspot-label { font: 500 10px 'Inter',sans-serif; text-transform: uppercase; letter-spacing: .08em; background: rgb(26 26 26 / .85); padding: 7px 9px; border-radius: 2px; }
+.equipment-panel { background: rgb(26 26 26 / .92); border: 1px solid rgb(238 217 179 / .15); }
+.panel-heading h2 { font-size: clamp(34px,4vw,62px); line-height: .95; text-transform: uppercase; }
+#panel-description { font-size: 13px; opacity: .65; }
+.equipment-card { border-color: rgb(238 217 179 / .1); }
+.equipment-card h3 { font-size: 15px; }.equipment-partner { font-size: 9px; text-transform: uppercase; letter-spacing: .06em; opacity: .6; }.equipment-prices dt { font-size: 9px; opacity: .6; }.equipment-prices dd { font: 500 12px 'JetBrains Mono',monospace; }.equipment-status,#view-label { font: 400 10px 'JetBrains Mono',monospace; }
+.equipment-image { background: rgb(238 217 179 / .035); }
+.catalog-action { width: 100%; justify-content: center; }
+.stage-topline { font-size: 10px; text-transform: uppercase; letter-spacing: .1em; }.stage-bottomline { font-size: 11px; }.stage-bottomline p { opacity: .65; }
+.close-panel { width: 34px; height: 34px; font-size: 22px; background: none; border-color: rgb(238 217 179 / .15); }
+.intro-content h2 { font-family: 'Space Grotesk',sans-serif; text-transform: none; font-weight: 400; }
+@media(max-width:767px){.panel-heading h2 { font-size: 38px; }.equipment-panel { padding: 24px; }.stage-bottomline .outline-button { padding: 10px; }}
+
+.soldier-camera { mix-blend-mode: lighten; }
+.panel-heading h2 { font-size: clamp(32px,3.1vw,48px); font-weight: 700; }
+.is-zoomed .panel-heading h2 { font-size: clamp(46px,5vw,76px); }

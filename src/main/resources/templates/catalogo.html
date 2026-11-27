@@ -6,6 +6,10 @@
     <title>Catalogo attrezzature | PEWPEW MF</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/png" th:href="@{/images/logo-pewpew.png}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap">
 </head>
 <body>
 <a class="skip-link" href="#main-content">Vai al contenuto</a>
@@ -59,7 +63,7 @@
            th:attr="aria-label=${'Dettagli: ' + articolo.nome}">
             <img th:if="${!#strings.isEmpty(articolo.immagineUrl)}" th:src="${articolo.immagineUrl}"
                  th:alt="${articolo.nome}" loading="lazy" data-discovery-image>
-            <span class="media-fallback" th:hidden="${!#strings.isEmpty(articolo.immagineUrl)}">Immagine non disponibile</span>
+            <span class="media-fallback" th:hidden="${!#strings.isEmpty(articolo.immagineUrl)}"><svg th:replace="~{catalogo :: silhouette(${articolo.zonaCorpo})}"></svg><span>Immagine non disponibile</span></span>
         </a>
         <div class="tactical-card-body">
             <span class="zone-badge" th:text="${articolo.zonaCorpo}">TESTA</span>
@@ -84,6 +88,30 @@
         </div>
     </article>
 </div>
+<svg th:fragment="silhouette(zona)" class="gear-illustration" viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g th:switch="${#strings.toString(zona)}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+        <g th:case="'TESTA'">
+            <path d="M48 112V94c0-43 28-65 73-65 42 0 70 25 70 65v18l-29 7-19-15H91l-17 15Z" fill="currentColor" fill-opacity=".08"/>
+            <path d="m49 96 26-9m90 0 24 9M102 32l-6 45m49-44 7 43M102 51h38v28h-38ZM73 114l10 45 36 20 37-20 11-45"/>
+            <path d="m79 105 40-7 43 7-7 27-25 3-11-10-10 10-24-3Z"/><path d="M99 149h42m-34 10h26"/>
+        </g>
+        <g th:case="'BUSTO'">
+            <path d="m75 29 23 1 9 30h26l10-30 23-1 20 52-6 91H60l-6-91Z" fill="currentColor" fill-opacity=".08"/>
+            <path d="m77 44-5 54h96l-5-54M88 74h65M78 87h85M76 111h28v44H76Zm32 0h27v44h-27Zm31 0h27v44h-27ZM65 161h110"/>
+        </g>
+        <g th:case="'ARMI'" transform="rotate(-25 120 100)">
+            <path d="M20 85h37V75h93v10h55v8h25v12h-25v8h-52l-8 12H73v-13H56l-15 18H18l11-28Z" fill="currentColor" fill-opacity=".08"/>
+            <path d="m90 125 29 1-5 36H87Zm37 0h17l-2 20h-13ZM92 75V57h28v18m-22-18v-8h16v8M61 88h85m12 7h42m-42 8h42M35 92h16"/>
+        </g>
+        <g th:case="'GAMBE'">
+            <path d="M78 25h83l8 75 15 75h-43l-20-77-20 77H58l15-76Z" fill="currentColor" fill-opacity=".08"/>
+            <path d="M76 41h87m-43-13v51M72 77h28v24H69m72-24h25l5 24h-26M69 122h30l-4 24H65m77-24h30l5 24h-30"/>
+        </g>
+        <g th:case="*">
+            <path d="M86 63h76v113H86Z" fill="currentColor" fill-opacity=".08"/><path d="M94 63 85 20h7l12 43m33 0V51h15v12M98 79h51v36H98Zm7 8h36m-36 9h25M99 130h9m10 0h9m10 0h9m-47 12h9m10 0h9m10 0h9m-47 12h9m10 0h9m10 0h9"/>
+        </g>
+    </g>
+</svg>
 </th:block>
 <script th:fragment="pageScripts">
     (() => {

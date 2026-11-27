@@ -10,6 +10,10 @@
     <link th:href="@{/css/style.css}" rel="stylesheet">
     <link th:href="@{/css/hero-soldier.css}" rel="stylesheet">
     <script th:src="@{/js/soldier-interactive.js}" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/png" th:href="@{/images/logo-pewpew.png}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap">
 </head>
 <body>
 <a class="skip-link" href="#main-content">Salta al contenuto</a>
@@ -80,7 +84,111 @@
         </aside>
     </section>
     <noscript><p class="noscript-message">Per usare lo zoom interattivo abilita JavaScript, oppure <a th:href="@{/catalogo}">esplora il catalogo completo</a>.</p></noscript>
+    <section class="home-featured" aria-labelledby="featured-title">
+        <div class="section-heading">
+            <h2 id="featured-title">Equipaggiamento<br>in evidenza</h2>
+            <a class="discover-link" th:href="@{/catalogo}">Vedi tutto <span aria-hidden="true">→</span></a>
+        </div>
+        <div id="featured-gear" class="featured-grid" aria-busy="true"></div>
+        <p id="featured-status" class="field-help" role="status">Caricamento attrezzatura…</p>
+        <noscript><a class="detail-link" th:href="@{/catalogo}">Scopri l’attrezzatura a catalogo</a></noscript>
+    </section>
+    <div class="tactical-marquee" aria-label="PEWPEW MF · Tactical equipment · Softair arena · Noleggio attrezzatura · Supporto tecnico 24/7">
+        <div class="marquee-track" aria-hidden="true">
+            <span>PEWPEW MF • TACTICAL EQUIPMENT • SOFTAIR ARENA • NOLEGGIO ATTREZZATURA • SUPPORTO TECNICO 24/7 •</span>
+            <span>PEWPEW MF • TACTICAL EQUIPMENT • SOFTAIR ARENA • NOLEGGIO ATTREZZATURA • SUPPORTO TECNICO 24/7 •</span>
+        </div>
+    </div>
+    <section class="home-editorial" aria-label="Partner ed eventi sul campo">
+        <a class="editorial-card" th:href="@{/partner}">
+            <div class="editorial-media"><img th:src="@{/images/soldato-kittato.jpg}" alt="Operatore softair con equipaggiamento tattico completo" width="2400" height="1792" loading="lazy"></div>
+            <h2>Partner<br>ufficiali</h2>
+            <p>Le persone e i marchi dietro il tuo equipaggiamento.</p>
+            <span class="discover-link">Scopri i partner <span aria-hidden="true">↗</span></span>
+        </a>
+        <a class="editorial-card" th:href="@{/partner#eventi}">
+            <div class="editorial-media"><video id="editorial-field-video" th:src="@{/img/intro.mp4}" muted playsinline preload="metadata" aria-hidden="true" tabindex="-1"></video></div>
+            <h2>Il prossimo<br>campo di gioco.</h2>
+            <p>Eventi, operazioni speciali e sessioni con i nostri partner.</p>
+            <span class="discover-link">Esplora gli eventi <span aria-hidden="true">↗</span></span>
+        </a>
+    </section>
     <footer class="armory-footer"><span>PEWPEW MF / Softair &amp; Mil-Sim</span><a th:href="@{/prenotazioni}">Il setup è pronto? Prenota la tua sessione ↗</a></footer>
 </main>
+<template id="featured-product-template">
+    <article class="featured-product">
+        <a class="catalog-media"><span class="zone-badge"></span><span class="media-fallback"><span>Immagine non disponibile</span></span></a>
+        <span class="featured-partner"></span>
+        <h3><a></a></h3>
+        <p class="featured-price"></p>
+    </article>
+</template>
+<template id="featured-art-TESTA"><svg th:replace="~{catalogo :: silhouette('TESTA')}"></svg></template>
+<template id="featured-art-BUSTO"><svg th:replace="~{catalogo :: silhouette('BUSTO')}"></svg></template>
+<template id="featured-art-ARMI"><svg th:replace="~{catalogo :: silhouette('ARMI')}"></svg></template>
+<template id="featured-art-ACCESSORI"><svg th:replace="~{catalogo :: silhouette('ACCESSORI')}"></svg></template>
+<script>
+    (() => {
+        const grid = document.getElementById('featured-gear');
+        const status = document.getElementById('featured-status');
+        const panel = document.getElementById('equipment-panel');
+        const productTemplate = document.getElementById('featured-product-template');
+        const euro = new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' });
+        const zones = ['TESTA', 'BUSTO', 'ARMI', 'ACCESSORI'];
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 12000);
+        const requests = zones.map(async zone => {
+            const response = await fetch(panel.dataset.apiBase + zone, { signal: controller.signal, headers: { Accept: 'application/json' } });
+            if (!response.ok) throw new Error('Catalogo non disponibile');
+            const items = await response.json();
+            if (!Array.isArray(items)) throw new Error('Catalogo non valido');
+            const item = items.find(value => value && Number.isSafeInteger(value.id)
+                && value.zonaCorpo === zone && typeof value.nome === 'string'
+                && value.prezzoAcquisto != null && Number.isFinite(Number(value.prezzoAcquisto)));
+            return item ? { item, zone } : null;
+        });
+        Promise.allSettled(requests).then(results => {
+            const fragment = document.createDocumentFragment();
+            results.forEach(result => {
+                if (result.status !== 'fulfilled' || !result.value) return;
+                const { item, zone } = result.value;
+                const card = productTemplate.content.cloneNode(true);
+                const media = card.querySelector('.catalog-media');
+                const detail = panel.dataset.detailBase + encodeURIComponent(item.id);
+                media.href = detail;
+                media.setAttribute('aria-label', item.nome);
+                card.querySelector('.zone-badge').textContent = zone;
+                const fallback = card.querySelector('.media-fallback');
+                fallback.prepend(document.getElementById('featured-art-' + zone).content.cloneNode(true));
+                if (typeof item.immagineUrl === 'string' && item.immagineUrl.trim()) {
+                    try {
+                        const url = new URL(item.immagineUrl, location.href);
+                        if (['http:', 'https:'].includes(url.protocol)) {
+                            const image = document.createElement('img');
+                            image.alt = item.nome;
+                            image.loading = 'lazy';
+                            image.addEventListener('load', () => { fallback.hidden = true; });
+                            image.addEventListener('error', () => { image.hidden = true; fallback.hidden = false; });
+                            image.src = url.href;
+                            media.append(image);
+                        }
+                    } catch (_) { /* Resta visibile l'illustrazione di categoria. */ }
+                }
+                card.querySelector('.featured-partner').textContent = item.partnerNome || 'PEWPEW MF';
+                const title = card.querySelector('h3 a');
+                title.textContent = item.nome;
+                title.href = detail;
+                card.querySelector('.featured-price').textContent = euro.format(Number(item.prezzoAcquisto));
+                fragment.append(card);
+            });
+            grid.replaceChildren(fragment);
+            status.textContent = grid.children.length ? '' : 'Attrezzatura non disponibile al momento. Esplora il catalogo completo.';
+        }).finally(() => { clearTimeout(timeout); grid.setAttribute('aria-busy', 'false'); });
+        const video = document.getElementById('editorial-field-video');
+        const showFrame = () => { if (Number.isFinite(video.duration)) video.currentTime = Math.min(.15, video.duration); };
+        if (video.readyState >= 1) showFrame();
+        else video.addEventListener('loadedmetadata', showFrame, { once: true });
+    })();
+</script>
 </body>
 </html>

@@ -1,12 +1,13 @@
 # STEP RESTYLE: Rinnovamento Grafico Contemporaneo (Ispirato a `empi.re`)
 
-> **Prerequisito:** Leggi `00_MASTER_RULES.md`.
+> **Prerequisito:** Leggi `agents.md`.
 > **Obiettivo Commit:** Eliminare ogni elemento visivo datato (bordi spessi stile anni 2000, sfondi marrone piatto su tutta la card, ombreggiature pesanti, font standard) e trasformare l'intera piattaforma **PEWPEW MF** in un sito moderno, pulito, ad alto impatto visivo ispirato all'estetica di **EMPIRE (`empi.re`)**: tipografia bold monumentale, griglie minimaliste edge-to-edge, schede prodotto pulite con micro-badge, hover fluidi e navbar trasparente/minimalista, **mantenendo intatta la logica Java/Spring/Thymeleaf, la Hero con video e lo Stage Interattivo con lo zoom sul Soldato**.
 > **NON modificare:** Controller Java, Service, Entity, Repository o endpoint JSON esistenti.
 
 ---
 
 ## 1. Filosofia Visiva (EMPIRE Aesthetic + Palette PEWPEW MF)
+
 Il sito `empi.re` comunica modernità grazie a **contrasto netto, tipografia oversize, zero fronzoli e micro-interazioni fluide**. Applichiamo questa direzione artistica usando esclusivamente i nostri colori:
 
 - **Sfondo Primario (`--color-black-outline`: `#1A1A1A`):** nero profondo opaco su tutta la pagina, senza riquadri colorati invadenti.
@@ -20,7 +21,9 @@ Il sito `empi.re` comunica modernità grazie a **contrasto netto, tipografia ove
 ---
 
 ## 2. Task 1: Navbar Minimalista Sticky (`templates/fragments/navbar.html`)
+
 Ridisegna la navbar ispirandoti all'header pulito di `empi.re`:
+
 1. **Struttura:**
    - Altezza compatta (`68px`), sfondo `rgba(26, 26, 26, 0.85)` con `backdrop-filter: blur(14px)`, bordo inferiore sottilissimo `1px solid rgba(238, 217, 179, 0.1)`.
    - **Sinistra:** Logo PEWPEW MF pulito + wordmark bold `PEWPEW MF` (senza sottotitoli superflui).
@@ -37,6 +40,7 @@ Ridisegna la navbar ispirandoti all'header pulito di `empi.re`:
 ---
 
 ## 3. Task 2: Home Page — Hero + Soldato Interattivo + Vetrine Stile EMPIRE (`templates/index.html`)
+
 Mantieni **al 100%** la Hero con il video introduttivo e lo Stage Interattivo del Soldato con lo zoom sulle 5 zone (`TESTA`, `BUSTO`, `ARMI`, `GAMBE`, `ACCESSORI`), ma eleva il design dello stage e aggiungi subito sotto le sezioni moderne stile `empi.re`:
 
 1. **Restyling Stage Soldato Interattivo:**
@@ -58,14 +62,23 @@ Mantieni **al 100%** la Hero con il video introduttivo e lo Stage Interattivo de
 ---
 
 ## 4. Task 3: Uniformare Tutte le Pagine Interne (`catalogo.html`, `prenotazioni.html`, `partner-eventi.html`, `account.html`, `ticket-*.html`, `carrello.html`, `login.html`)
+
 Applica lo stesso design system contemporaneo (`static/css/style.css`) a tutte le pagine già create:
-- **Catalogo (`catalogo.html`):** Tab orizzontali minimaliste in alto per filtrare `TUTTI | TESTA | BUSTO | ARMI | GAMBE | ACCESSORI` (stile tab *Trending / Bestsellers / Merch* di `empi.re`, con linea inferiore `#F08C00` sulla tab attiva invece dei vecchi bottoni colorati) + griglia prodotto pulita a 4 colonne.
+
+- **Catalogo (`catalogo.html`):** Tab orizzontali minimaliste in alto per filtrare `TUTTI | TESTA | BUSTO | ARMI | GAMBE | ACCESSORI` (stile tab _Trending / Bestsellers / Merch_ di `empi.re`, con linea inferiore `#F08C00` sulla tab attiva invece dei vecchi bottoni colorati) + griglia prodotto pulita a 4 colonne.
 - **Prenotazione Sessioni (`prenotazioni.html` e `prenotazione-configura.html`):** Card sessioni con layout orizzontale moderno (data grande monospace a sinistra, dettagli campo al centro, prezzo e CTA netta a destra). Nel configuratore noleggio, usa card selezionabili con bordo attivo `#F08C00` e riepilogo sticky minimalista.
 - **Account, Carrello & Ticket (`account.html`, `carrello.html`, `ticket-lista.html`, `ticket-dettaglio.html`):** Tabelle senza griglie pesanti (solo divisori orizzontali sottili `1px solid rgba(238,217,179,0.1)`), badge stato compatti e chat ticket stile messenger moderno.
 
 ---
 
-## 5. File da Aggiornare (Scope Esatto)
+## 5. Task 4: Logi/ favicon
+
+cambia i loghi e imposta una favicon prendendo il logo all'inteno di ..\src\img\logo.pdf
+
+---
+
+## 6. File da Aggiornare (Scope Esatto)
+
 1. `src/main/resources/static/css/style.css` (Nuovo design system completo, import Google Fonts `Space Grotesk`, `Inter`, `JetBrains Mono`, variabili palette, card, bottoni, marquee, navbar).
 2. `src/main/resources/static/css/hero-soldier.css` (Aggiornamento stile minimalista dello stage soldato e degli hotspot).
 3. `src/main/resources/templates/fragments/navbar.html` (Navbar sticky contemporanea).
@@ -75,7 +88,8 @@ Applica lo stesso design system contemporaneo (`static/css/style.css`) a tutte l
 ---
 
 ## Verifica Finale
+
 1. Avvia l'applicazione e visita tutte le pagine principali (`/`, `/catalogo`, `/prenotazioni`, `/partner`, `/account`, `/ticket`).
 2. Verifica che il sito abbia un aspetto editoriale contemporaneo ad alto contrasto ispirato a `empi.re`, con i colori ufficiali **PEWPEW MF** (`#1A1A1A`, `#EED9B3`, `#F08C00`, `#C92A2A`, `#4E5D3F`, `#4A1E1E`).
 3. Verifica che la Hero video iniziale e lo zoom interattivo sulle 5 parti del corpo del soldato funzionino esattamente come prima.
-4. Chiudi la risposta con il `### REPORT COMMIT` previsto in `00_MASTER_RULES.md`.
+4. Chiudi la risposta con il `### REPORT COMMIT` previsto in `agents.md`.
