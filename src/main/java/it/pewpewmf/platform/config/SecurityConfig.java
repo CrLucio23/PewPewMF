@@ -23,7 +23,7 @@ public class SecurityConfig {
                         .requestMatchers("/carrello", "/carrello/aggiungi", "/carrello/rimuovi").permitAll()
                         .requestMatchers("/", "/catalogo/**", "/partner/**", "/eventi/**",
                                 "/api/attrezzature/**", "/api/soldato/zona/**", "/login", "/registrazione",
-                                "/css/**", "/js/**", "/images/**").permitAll()
+                                "/css/**", "/js/**", "/images/**", "/img/**").permitAll()
                         .requestMatchers("/prenotazioni/**", "/carrello/**", "/account/**",
                                 "/ticket/**").authenticated()
                         .anyRequest().authenticated())

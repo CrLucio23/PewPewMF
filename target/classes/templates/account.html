@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Il tuo account | PEWPEW MF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Vai al contenuto</a>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+<main id="main-content" class="discovery-shell">
+    <header class="discovery-heading account-heading"><div><h1>Il tuo account</h1><p>Benvenuto, <strong th:text="${utente.username}"></strong>.</p></div>
+        <form method="post" th:action="@{/logout}"><button class="outline-button" type="submit">Esci</button></form></header>
+    <p th:if="${param.ordineSuccess != null}" class="feedback-success" role="status">Ordine confermato. Il carrello è stato svuotato.</p>
+    <p th:if="${param.prenotazioneSuccess != null}" class="feedback-success" role="status">Prenotazione confermata.</p>
+    <p th:if="${conferma != null}" th:text="${conferma}" class="feedback-success" role="status"></p>
+    <p th:if="${errore != null}" th:text="${errore}" class="feedback-error" role="alert"></p>
+    <section class="profile-panel" aria-labelledby="profile-title">
+        <h2 id="profile-title">Profilo operatore</h2>
+        <dl class="profile-data"><div><dt>Nome</dt><dd th:text="${utente.nome ?: '—'}"></dd></div><div><dt>Cognome</dt><dd th:text="${utente.cognome ?: '—'}"></dd></div><div><dt>Email</dt><dd th:text="${utente.email}"></dd></div><div><dt>Ruolo</dt><dd th:text="${utente.ruolo}"></dd></div></dl>
+    </section>
+    <nav class="account-tabs" aria-label="Sezioni account"><a id="tab-ordini" href="#ordini">I Miei Ordini</a><a id="tab-prenotazioni" href="#prenotazioni">Le Mie Prenotazioni</a><a id="tab-tickets" href="#tickets">I Miei Ticket di Supporto</a></nav>
+    <section id="ordini" class="account-section" aria-labelledby="orders-title">
+        <h2 id="orders-title">I Miei Ordini</h2>
+        <p class="empty-results" th:if="${#lists.isEmpty(ordini)}">Non hai ancora effettuato ordini.</p>
+        <article class="history-card" th:each="ordine : ${ordini}">
+            <h3 th:text="${ordine.codiceOrdine}"></h3>
+            <p><time th:datetime="${ordine.dataOrdine}" th:text="${#temporals.format(ordine.dataOrdine,'dd/MM/yyyy HH:mm')}"></time> · <span th:text="${ordine.statoOrdine}"></span></p>
+            <ul><li th:each="riga : ${ordine.dettagli}"><a th:href="@{/catalogo/articolo/{id}(id=${riga.attrezzatura.id})}" th:text="${riga.attrezzatura.nome}"></a> · <span th:text="${riga.quantita + ' × ' + #numbers.formatDecimal(riga.prezzoUnitario,1,'POINT',2,'COMMA') + ' €'}"></span></li></ul>
+            <p class="history-total">Totale <strong th:text="${#numbers.formatDecimal(ordine.totale,1,'POINT',2,'COMMA') + ' €'}"></strong></p>
+        </article>
+    </section>
+    <section id="prenotazioni" class="account-section" aria-labelledby="bookings-title">
+        <h2 id="bookings-title">Le Mie Prenotazioni</h2>
+        <p class="empty-results" th:if="${#lists.isEmpty(prenotazioni)}">Non hai ancora prenotato sessioni.</p>
+        <article class="history-card" th:each="prenotazione : ${prenotazioni}">
+            <h3 th:text="${prenotazione.sessioneGioco.titolo}"></h3>
+            <p th:text="${prenotazione.codicePrenotazione}"></p>
+            <p><time th:datetime="${prenotazione.sessioneGioco.dataOraInizio}" th:text="${#temporals.format(prenotazione.sessioneGioco.dataOraInizio,'dd/MM/yyyy HH:mm')}"></time> · <span th:text="${prenotazione.sessioneGioco.campo}"></span></p>
+            <p th:text="${prenotazione.stato}"></p>
+            <p th:text="${prenotazione.conNoleggioAttrezzatura ? 'Con noleggio attrezzatura' : 'Con attrezzatura propria, senza noleggio'}"></p>
+            <ul th:if="${prenotazione.conNoleggioAttrezzatura}"><li th:each="articolo : ${prenotazione.attrezzatureNoleggiate}" th:text="${articolo.nome}"></li></ul>
+            <p class="history-total">Totale <strong th:text="${#numbers.formatDecimal(prenotazione.totalePagato,1,'POINT',2,'COMMA') + ' €'}"></strong></p>
+            <form th:if="${prenotazione.stato.name() == 'CONFERMATA'}" method="post" th:action="@{/account/prenotazioni/{id}/annulla(id=${prenotazione.id})}"><button type="submit" class="outline-button">Annulla prenotazione</button></form>
+        </article>
+    </section>
+    <section id="tickets" class="account-section" aria-labelledby="tickets-title">
+        <div class="section-heading"><h2 id="tickets-title">I Miei Ticket di Supporto</h2><a class="primary-button" th:href="@{/ticket#nuovo}">Apri Nuovo Ticket</a></div>
+        <div th:replace="~{ticket-lista :: elenco(${tickets})}"></div>
+    </section>
+</main>
+<script th:replace="~{catalogo :: pageScripts}"></script>
+<script>
+    (() => {
+        const nav = document.querySelector('.account-tabs');
+        const tabs = Array.from(nav.querySelectorAll('a'));
+        const panels = tabs.map(tab => document.querySelector(tab.hash));
+        nav.setAttribute('role', 'tablist');
+        tabs.forEach((tab, index) => {
+            tab.setAttribute('role', 'tab');
+            tab.setAttribute('aria-controls', panels[index].id);
+            panels[index].setAttribute('role', 'tabpanel');
+            panels[index].setAttribute('aria-labelledby', tab.id);
+            panels[index].tabIndex = 0;
+            tab.addEventListener('keydown', event => {
+                let next;
+                if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+                if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
+                if (event.key === 'Home') next = 0;
+                if (event.key === 'End') next = tabs.length - 1;
+                if (next !== undefined) { event.preventDefault(); tabs[next].click(); tabs[next].focus(); }
+            });
+        });
+        function activate() {
+            const active = Math.max(0, tabs.findIndex(tab => tab.hash === location.hash));
+            tabs.forEach((tab, index) => {
+                tab.setAttribute('aria-selected', String(index === active));
+                tab.tabIndex = index === active ? 0 : -1;
+                panels[index].hidden = index !== active;
+            });
+        }
+        window.addEventListener('hashchange', activate);
+        activate();
+    })();
+</script>
+</body></html>

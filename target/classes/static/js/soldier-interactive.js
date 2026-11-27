@@ -5,6 +5,9 @@
     const main = document.getElementById('main-content');
     const enter = document.getElementById('enter-armory');
     const replay = document.getElementById('replay-intro');
+    const video = document.getElementById('intro-video');
+    const audio = document.getElementById('intro-audio');
+    const navigation = document.querySelector('.site-nav');
     const camera = document.getElementById('soldier-camera');
     const stage = document.getElementById('interactive-soldier-stage');
     const panel = document.getElementById('equipment-panel');
@@ -37,6 +40,38 @@
     let introTimer = null;
     let previousHotspot = null;
     let introSeen = false;
+    let touchStartY = null;
+
+    function updateAudio() {
+        if (!video || !audio) return;
+        audio.textContent = video.muted ? 'AUDIO OFF' : 'AUDIO ON';
+        audio.setAttribute('aria-pressed', String(!video.muted));
+        audio.setAttribute('aria-label', video.muted ? 'Attiva audio del video' : 'Disattiva audio del video');
+    }
+
+    function playIntro() {
+        if (!video || intro.hidden || intro.classList.contains('is-leaving') || document.hidden) return;
+        const playback = video.play();
+        if (playback) playback.catch(() => {
+            video.muted = true;
+            updateAudio();
+        });
+    }
+
+    if (video) {
+        video.muted = true;
+        video.pause();
+        video.addEventListener('volumechange', updateAudio);
+        video.addEventListener('error', () => {
+            if (audio) audio.disabled = true;
+        });
+    }
+    audio?.addEventListener('click', () => {
+        if (!video) return;
+        video.muted = !video.muted;
+        updateAudio();
+        playIntro();
+    });
 
     try {
         introSeen = sessionStorage.getItem(storageKey) === 'true';
@@ -50,12 +85,10 @@
         intro.classList.remove('is-leaving');
         document.body.classList.add('intro-active');
         main.inert = true;
-        // Ricrea le animazioni sequenziali quando viene richiesta una nuova visione.
-        intro.querySelectorAll('.gear-helmet, .gear-vest, .gear-rifle, .gear-hud').forEach(group => {
-            group.style.animation = 'none';
-        });
-        void intro.offsetHeight;
-        intro.querySelectorAll('[style]').forEach(group => group.style.removeProperty('animation'));
+        if (navigation) navigation.inert = true;
+        if (video && video.readyState > 0) video.currentTime = 0;
+        if (!reducedMotion.matches) playIntro();
+        updateAudio();
         enter.focus({ preventScroll: true });
     }
 
@@ -63,6 +96,7 @@
         if (!intro.classList.contains('is-leaving')) return;
         intro.hidden = true;
         main.inert = false;
+        if (navigation) navigation.inert = false;
         document.body.classList.remove('intro-active');
         replay.hidden = false;
         main.focus({ preventScroll: true });
@@ -76,15 +110,44 @@
             // La navigazione continua senza memorizzare la preferenza.
         }
         intro.classList.add('is-leaving');
+        video?.pause();
         if (reducedMotion.matches) {
             finishIntro();
         } else {
-            introTimer = window.setTimeout(finishIntro, 700);
+            introTimer = window.setTimeout(finishIntro, 850);
         }
     }
 
     enter.addEventListener('click', leaveIntro);
     replay.addEventListener('click', showIntro);
+    intro.addEventListener('wheel', event => {
+        if (event.deltaY > 18 && !event.ctrlKey) leaveIntro();
+    }, { passive: true });
+    intro.addEventListener('touchstart', event => {
+        touchStartY = event.touches.length === 1 ? event.touches[0].clientY : null;
+    }, { passive: true });
+    intro.addEventListener('touchend', event => {
+        if (touchStartY !== null && event.changedTouches.length
+                && touchStartY - event.changedTouches[0].clientY > 40) leaveIntro();
+        touchStartY = null;
+    }, { passive: true });
+    intro.addEventListener('keydown', event => {
+        if (event.key === 'ArrowDown' || event.key === 'PageDown') {
+            event.preventDefault();
+            leaveIntro();
+        }
+        if (event.key !== 'Tab') return;
+        const controls = Array.from(intro.querySelectorAll('button:not(:disabled), a[href]'));
+        const first = controls[0];
+        const last = controls[controls.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first?.focus();
+        }
+    });
     intro.addEventListener('transitionend', event => {
         if (event.target === intro && event.propertyName === 'opacity') finishIntro();
     });
@@ -282,5 +345,13 @@
     });
     document.addEventListener('visibilitychange', () => {
         document.body.classList.toggle('is-background', document.hidden);
+        if (document.hidden) video?.pause();
+        else if (!reducedMotion.matches) playIntro();
+    });
+    window.addEventListener('pagehide', () => video?.pause());
+    window.addEventListener('pageshow', () => { if (!reducedMotion.matches) playIntro(); });
+    reducedMotion.addEventListener('change', () => {
+        if (reducedMotion.matches) video?.pause();
+        else playIntro();
     });
 })();
