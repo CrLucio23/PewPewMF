@@ -9,6 +9,8 @@ import it.pewpewmf.platform.repository.PartnerRepository;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,21 @@ public class PartnerEventoService {
 
     public List<Partner> getPartners() {
         return partners.findAll();
+    }
+
+    public List<Evento> getEventi() {
+        return eventi.findAll().stream()
+                .sorted(Comparator.comparing(Evento::getDataInizio)).toList();
+    }
+
+    public Map<Long, Long> getConteggiAttrezzature() {
+        return attrezzature.findAll().stream().filter(a -> a.getPartner() != null)
+                .collect(Collectors.groupingBy(a -> a.getPartner().getId(), Collectors.counting()));
+    }
+
+    public Map<Long, Long> getConteggiEventi() {
+        return eventi.findAll().stream().flatMap(e -> e.getPartners().stream())
+                .collect(Collectors.groupingBy(Partner::getId, Collectors.counting()));
     }
 
     public Partner getPartner(Long id) {
