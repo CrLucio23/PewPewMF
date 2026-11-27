@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Centro supporto | PEWPEW MF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Vai al contenuto</a>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+<main id="main-content" class="discovery-shell">
+    <header class="discovery-heading"><h1>Centro supporto</h1><p th:text="${staff ? 'Console operativa: tutti i ticket aperti e in lavorazione.' : 'Supporto tecnico sempre operativo. Apri un ticket e segui le risposte qui.'}"></p></header>
+    <p class="feedback-error" th:if="${errore != null}" th:text="${errore}" role="alert"></p>
+    <div class="support-layout">
+        <section aria-labelledby="list-title"><h2 id="list-title" th:text="${staff ? 'Ticket da gestire' : 'I tuoi ticket'}"></h2><div th:replace="~{ticket-lista :: elenco(${tickets})}"></div></section>
+        <section id="nuovo" class="support-form-panel" aria-labelledby="new-ticket-title">
+            <h2 id="new-ticket-title">Apri Nuovo Ticket</h2>
+            <form method="post" th:action="@{/ticket/nuovo}" class="stack-form">
+                <div><label for="oggetto">Oggetto</label><input id="oggetto" name="oggetto" th:value="${oggetto}" maxlength="255" required></div>
+                <div><label for="categoria">Categoria</label><input id="categoria" name="categoria" th:value="${categoria}" placeholder="Ordine, prenotazione, attrezzatura…" maxlength="255" required></div>
+                <div><label for="priorita">Priorità</label><select id="priorita" name="priorita" required><option th:each="valore : ${priorita}" th:value="${valore}" th:text="${valore}" th:selected="${valore == prioritaSelezionata}"></option></select></div>
+                <div><label for="testo">Primo messaggio</label><textarea id="testo" name="testo" rows="6" th:text="${testo}" required></textarea></div>
+                <button class="primary-button" type="submit">Invia ticket</button>
+            </form>
+        </section>
+    </div>
+</main>
+<script th:replace="~{catalogo :: pageScripts}"></script>
+<th:block th:if="${false}">
+    <div th:fragment="elenco(elencoTickets)" class="ticket-list">
+        <p class="empty-results" th:if="${#lists.isEmpty(elencoTickets)}">Nessun ticket da mostrare.</p>
+        <article class="history-card ticket-card" th:each="ticket : ${elencoTickets}">
+            <span class="ticket-status" th:classappend="${'status-' + ticket.stato}" th:text="${ticket.stato}"></span>
+            <h3><a th:href="@{/ticket/{id}(id=${ticket.id})}" th:text="${ticket.oggetto}"></a></h3>
+            <p th:text="${ticket.codiceTicket}"></p>
+            <p><span th:text="${ticket.categoria}"></span> · Priorità <span th:text="${ticket.priorita}"></span></p>
+            <p>Aggiornato il <time th:datetime="${ticket.ultimoAggiornamento}" th:text="${#temporals.format(ticket.ultimoAggiornamento,'dd/MM/yyyy HH:mm')}"></time></p>
+            <a class="detail-link" th:href="@{/ticket/{id}(id=${ticket.id})}">Apri conversazione</a>
+        </article>
+    </div>
+</th:block>
+</body></html>
