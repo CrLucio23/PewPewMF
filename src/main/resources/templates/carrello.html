@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Carrello | PEWPEW MF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Vai al contenuto</a>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+<main id="main-content" class="discovery-shell">
+    <header class="discovery-heading"><h1>Il tuo carrello</h1><p>Rivedi l’attrezzatura prima di confermare l’ordine.</p></header>
+    <p class="feedback-error" th:if="${errore != null}" th:text="${errore}" role="alert"></p>
+    <p class="feedback-success" th:if="${conferma != null}" th:text="${conferma}" role="status"></p>
+    <div th:if="${#lists.isEmpty(riepilogo.righe)}" class="empty-results"><p>Il carrello è vuoto.</p><a class="primary-button" th:href="@{/catalogo}">Esplora il catalogo</a></div>
+    <div th:unless="${#lists.isEmpty(riepilogo.righe)}" class="commerce-layout">
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Articoli nel carrello">
+            <table class="tactical-table">
+                <thead><tr><th scope="col">Articolo</th><th scope="col">Quantità</th><th scope="col">Prezzo</th><th scope="col">Subtotale</th><th scope="col">Azioni</th></tr></thead>
+                <tbody><tr th:each="riga : ${riepilogo.righe}">
+                    <td><a class="detail-link" th:href="@{/catalogo/articolo/{id}(id=${riga.articolo.id})}" th:text="${riga.articolo.nome}"></a></td>
+                    <td th:text="${riga.quantita}"></td>
+                    <td class="money" th:text="${#numbers.formatDecimal(riga.articolo.prezzoAcquisto,1,'POINT',2,'COMMA') + ' €'}"></td>
+                    <td class="money" th:text="${#numbers.formatDecimal(riga.subtotale,1,'POINT',2,'COMMA') + ' €'}"></td>
+                    <td><form method="post" th:action="@{/carrello/rimuovi}"><input type="hidden" name="attrezzaturaId" th:value="${riga.articolo.id}"><button class="outline-button" type="submit" th:attr="aria-label=${'Rimuovi ' + riga.articolo.nome}">Rimuovi</button></form></td>
+                </tr></tbody>
+            </table>
+        </div>
+        <aside class="booking-summary" aria-labelledby="cart-summary-title">
+            <h2 id="cart-summary-title">Riepilogo ordine</h2>
+            <dl><div class="booking-grand-total"><dt>Totale</dt><dd th:text="${#numbers.formatDecimal(riepilogo.totale,1,'POINT',2,'COMMA') + ' €'}"></dd></div></dl>
+            <form sec:authorize="isAuthenticated()" method="post" th:action="@{/carrello/checkout}"><button class="primary-button" type="submit">Conferma ordine</button></form>
+            <a sec:authorize="!isAuthenticated()" class="primary-button" th:href="@{/login}">Accedi per completare l’ordine</a>
+            <p>La disponibilità viene verificata alla conferma.</p>
+            <a class="detail-link" th:href="@{/catalogo}">Continua gli acquisti</a>
+        </aside>
+    </div>
+</main>
+<script th:replace="~{catalogo :: pageScripts}"></script>
+</body></html>

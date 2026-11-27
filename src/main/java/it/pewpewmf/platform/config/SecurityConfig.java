@@ -1,5 +1,6 @@
 package it.pewpewmf.platform.config;
 
+import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,13 +18,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(auth -> auth
+                        .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
+                        .requestMatchers("/favicon.ico").permitAll()
+                        .requestMatchers("/carrello", "/carrello/aggiungi", "/carrello/rimuovi").permitAll()
                         .requestMatchers("/", "/catalogo/**", "/partner/**", "/eventi/**",
                                 "/api/attrezzature/**", "/api/soldato/zona/**", "/login", "/registrazione",
                                 "/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/prenotazioni/**", "/carrello/**", "/account/**",
                                 "/ticket/**").authenticated()
                         .anyRequest().authenticated())
-                .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/", true).permitAll())
+                .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/account", false).permitAll())
                 .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/?logout"))
                 .build();
     }

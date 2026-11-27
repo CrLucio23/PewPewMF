@@ -351,3 +351,75 @@ body.is-background .radar::after, body.is-background .operational i { animation-
     .discovery-shell .mode-card { padding: 20px; }
     .mode-card strong { font-size: 20px; }
 }
+
+/* Autenticazione, carrello, account e centro supporto — Step 6. */
+.auth-shell { min-height: calc(100dvh - 90px); display: grid; place-items: center; }
+.auth-card { width: min(100%, 560px); padding: clamp(24px, 4vw, 44px); background: var(--color-dark-mountain); border: 1px solid var(--color-military-green); }
+.auth-brand { display: inline-block; margin-bottom: 28px; }
+.auth-card h1 { font-size: clamp(36px, 5vw, 54px); line-height: 1.1; margin-bottom: 18px; }
+.stack-form { display: grid; gap: 20px; }
+.stack-form .primary-button { justify-content: center; }
+.form-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.form-pair > div { min-width: 0; }
+.auth-alternative { margin: 24px 0 12px; }
+.field-help { font-size: 13px; margin: 8px 0 0; }
+.feedback-error, .feedback-success { padding: 18px 22px; margin-bottom: 24px; background: var(--color-dark-mountain); border: 2px solid var(--color-red-mascot); overflow-wrap: anywhere; }
+.feedback-success { border-color: var(--color-military-green); }
+.feedback-error p:last-child, .feedback-success p:last-child { margin-bottom: 0; }
+.commerce-layout { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+.table-scroll { max-width: 100%; overflow-x: auto; }
+.tactical-table { width: 100%; border-collapse: collapse; background: var(--color-dark-mountain); }
+.tactical-table th, .tactical-table td { padding: 20px 16px; border-bottom: 1px solid var(--color-military-green); vertical-align: middle; }
+.tactical-table th { text-align: left; font-size: 14px; }
+.tactical-table .money { white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; color: var(--color-gold-orange); }
+.commerce-layout .booking-summary > p { margin-top: 20px; }
+.account-heading { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.profile-panel, .history-card, .support-form-panel { padding: 28px; background: var(--color-dark-mountain); border: 1px solid var(--color-military-green); min-width: 0; }
+.profile-data { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: 0; }
+.profile-data dd { margin: 8px 0 0; overflow-wrap: anywhere; }
+.profile-data dt, .ticket-info dt { font-size: 14px; }
+.account-tabs { display: flex; flex-wrap: wrap; gap: 12px; margin: 32px 0; }
+.account-tabs a { padding: 14px 20px; border: 1px solid var(--color-military-green); font-weight: 700; }
+.account-tabs a[aria-selected="true"] { border-color: var(--color-gold-orange); background: var(--color-red-mascot); color: var(--color-cream-text); }
+.account-section { scroll-margin-top: 110px; }
+.history-card { margin-bottom: 20px; overflow-wrap: anywhere; }
+.history-card h3 { margin-bottom: 16px; }
+.history-card ul { padding-left: 20px; }
+.history-card li { margin-bottom: 8px; }
+.history-total strong { color: var(--color-gold-orange); font-size: 24px; margin-left: 12px; }
+.support-layout { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(300px, 1fr); align-items: start; gap: 32px; }
+.support-layout > section { min-width: 0; }
+.support-form-panel { scroll-margin-top: 110px; }
+.support-form-panel h2 { font-size: 28px; }
+.discovery-shell textarea { display: block; width: 100%; padding: 12px; border: 1px solid var(--color-military-green); border-radius: 0; background: var(--color-black-outline); color: var(--color-cream-text); font: inherit; resize: vertical; }
+.discovery-shell textarea:focus-visible { outline: 2px solid var(--color-gold-orange); outline-offset: 3px; }
+.ticket-status { display: inline-block; padding: 7px 12px; margin-bottom: 18px; background: var(--color-black-outline); color: var(--color-cream-text); border: 1px solid var(--color-military-green); font-size: 13px; font-weight: 700; }
+.status-APERTO { background: var(--color-red-mascot); border-color: var(--color-red-mascot); }
+.status-IN_LAVORAZIONE { background: var(--color-gold-orange); color: var(--color-black-outline); border-color: var(--color-gold-orange); }
+.status-RISOLTO { background: var(--color-military-green); }
+.discovery-heading .ticket-title { font-size: clamp(32px, 4vw, 56px); }
+.ticket-thread { display: grid; gap: 20px; }
+.ticket-message { padding: 24px; background: var(--color-dark-mountain); border: 1px solid var(--color-military-green); min-width: 0; }
+.ticket-message header { display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; margin-bottom: 18px; overflow-wrap: anywhere; }
+.ticket-message time { margin-left: auto; font-size: 13px; }
+.staff-message { border-color: var(--color-gold-orange); }
+.staff-label { color: var(--color-gold-orange); font-size: 13px; font-weight: 700; }
+.message-text { white-space: pre-wrap; overflow-wrap: anywhere; margin-bottom: 0; }
+.reply-form { margin-top: 28px; }
+.ticket-info > div { margin-bottom: 18px; }
+.ticket-info dd { margin-top: 5px; overflow-wrap: anywhere; }
+@media (max-width: 1100px) {
+    .commerce-layout, .support-layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .commerce-layout .booking-summary { position: static; }
+    .profile-data { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 767px) {
+    .account-heading { align-items: flex-start; }
+    .profile-panel, .history-card, .support-form-panel { padding: 22px; }
+    .form-pair, .profile-data { grid-template-columns: minmax(0, 1fr); }
+    .account-tabs { flex-direction: column; }
+    .account-tabs a { padding: 12px 16px; }
+    .tactical-table th, .tactical-table td { padding: 16px 12px; }
+    .ticket-message { padding: 20px; }
+    .ticket-message time { margin-left: 0; width: 100%; }
+}

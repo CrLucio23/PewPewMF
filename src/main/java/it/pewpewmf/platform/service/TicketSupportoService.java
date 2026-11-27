@@ -85,6 +85,19 @@ public class TicketSupportoService {
                 : tickets.findByUtenteIdOrderByUltimoAggiornamentoDesc(autore.getId());
     }
 
+    public boolean isStaff() {
+        return staff(utenti.getUtenteCorrente());
+    }
+
+    public List<TicketSupporto> getTicketsUtente() {
+        return tickets.findByUtenteIdOrderByUltimoAggiornamentoDesc(utenti.getUtenteCorrente().getId());
+    }
+
+    public List<TicketSupporto> getTicketsAperti() {
+        return getTickets().stream().filter(t -> t.getStato() == StatoTicket.APERTO
+                || t.getStato() == StatoTicket.IN_LAVORAZIONE).toList();
+    }
+
     public TicketSupporto getTicket(Long id) {
         TicketSupporto ticket = carica(id, utenti.getUtenteCorrente(), false);
         ticket.getMessaggi().sort(Comparator.comparing(MessaggioTicket::getDataInvio)
