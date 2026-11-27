@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Partner ed eventi | PEWPEW MF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Vai al contenuto</a>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+<main id="main-content" class="discovery-shell">
+    <header class="discovery-heading">
+        <h1>Partner &amp; Eventi</h1>
+        <p>Dall’equipaggiamento al campo: scopri chi ci affianca e dove giocare.</p>
+        <a class="outline-button" href="#eventi">Vai al calendario eventi</a>
+    </header>
+    <section class="discovery-section" aria-labelledby="partners-title">
+        <h2 id="partners-title">Partner Ufficiali</h2>
+        <div class="partner-grid">
+            <p class="empty-results" th:if="${#lists.isEmpty(partners)}">Nessun partner ufficiale presente.</p>
+            <article class="partner-card" th:each="partner : ${partners}">
+                <a class="partner-logo" th:href="@{/partner/{id}(id=${partner.id})}">
+                    <img th:if="${!#strings.isEmpty(partner.logoUrl)}" th:src="${partner.logoUrl}"
+                         th:alt="${'Logo ' + partner.nome}" loading="lazy" data-discovery-image>
+                    <span th:hidden="${!#strings.isEmpty(partner.logoUrl)}" th:text="${partner.nome}"></span>
+                </a>
+                <div class="tactical-card-body">
+                    <h3><a th:href="@{/partner/{id}(id=${partner.id})}" th:text="${partner.nome}"></a></h3>
+                    <p class="partner-category" th:text="${partner.categoriaPartner}"></p>
+                    <p th:text="${partner.descrizione}"></p>
+                    <dl class="partner-counts">
+                        <div><dt>Attrezzature</dt><dd th:text="${conteggiAttrezzature[partner.id] ?: 0}">0</dd></div>
+                        <div><dt>Eventi</dt><dd th:text="${conteggiEventi[partner.id] ?: 0}">0</dd></div>
+                    </dl>
+                    <a class="detail-link" th:href="@{/partner/{id}(id=${partner.id})}">Scopri partner, attrezzature ed eventi</a>
+                </div>
+            </article>
+        </div>
+    </section>
+    <section id="eventi" class="discovery-section" aria-labelledby="events-title">
+        <h2 id="events-title">Eventi &amp; Operazioni Speciali</h2>
+        <div th:replace="~{partner-eventi :: eventi(${eventi})}"></div>
+    </section>
+</main>
+<script th:replace="~{catalogo :: pageScripts}"></script>
+
+<th:block th:if="${false}">
+<div th:fragment="eventi(elencoEventi)" class="events-list">
+    <p class="empty-results" th:if="${#lists.isEmpty(elencoEventi)}">Nessun evento associato al momento.</p>
+    <article class="event-card" th:each="evento : ${elencoEventi}">
+        <div class="event-date">
+            <time th:datetime="${evento.dataInizio}" th:text="${#temporals.format(evento.dataInizio, 'dd/MM/yyyy')}"></time>
+            <span th:text="${#temporals.format(evento.dataInizio, 'HH:mm')}"></span>
+        </div>
+        <div class="event-information">
+            <h3 th:text="${evento.titolo}"></h3>
+            <p class="event-location" th:text="${evento.luogo}"></p>
+            <p>Fino al <time th:datetime="${evento.dataFine}" th:text="${#temporals.format(evento.dataFine, 'dd/MM/yyyy HH:mm')}"></time></p>
+            <p th:text="${evento.descrizione}"></p>
+            <div class="event-partners" aria-label="Partner coinvolti">
+                <a class="partner-badge" th:each="partner : ${evento.partners}"
+                   th:href="@{/partner/{id}(id=${partner.id})}" th:text="${partner.nome}"></a>
+                <span th:if="${#lists.isEmpty(evento.partners)}">Nessun partner associato.</span>
+            </div>
+            <a class="outline-button" th:href="@{/prenotazioni(eventoId=${evento.id})}">Sessioni di gioco dell’evento</a>
+        </div>
+    </article>
+</div>
+</th:block>
+</body>
+</html>
