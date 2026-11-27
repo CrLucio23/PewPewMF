@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${articolo.nome + ' | PEWPEW MF'}">Dettaglio articolo | PEWPEW MF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Vai al contenuto</a>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+<main id="main-content" class="discovery-shell">
+    <nav class="discovery-breadcrumb" aria-label="Percorso">
+        <a th:href="@{/catalogo}">Catalogo completo</a><span aria-hidden="true"> / </span>
+        <a th:href="@{/catalogo(zona=${articolo.zonaCorpo})}" th:text="${articolo.zonaCorpo}">Zona</a>
+    </nav>
+    <div class="article-layout">
+        <div class="article-media">
+            <img th:if="${!#strings.isEmpty(articolo.immagineUrl)}" th:src="${articolo.immagineUrl}"
+                 th:alt="${articolo.nome}" data-discovery-image>
+            <span class="media-fallback" th:hidden="${!#strings.isEmpty(articolo.immagineUrl)}">Immagine non disponibile</span>
+        </div>
+        <section class="article-information" aria-labelledby="article-title">
+            <h1 id="article-title" th:text="${articolo.nome}">Articolo</h1>
+            <p class="article-description" th:text="${articolo.descrizione}"></p>
+            <dl class="article-specs">
+                <div><dt>Codice SKU</dt><dd th:text="${articolo.codiceSku}"></dd></div>
+                <div><dt>Categoria</dt><dd th:text="${articolo.categoria ?: 'Non specificata'}"></dd></div>
+                <div><dt>Zona corpo</dt><dd th:text="${articolo.zonaCorpo}"></dd></div>
+            </dl>
+            <div class="purchase-panel">
+                <h2>Acquisto</h2>
+                <p class="purchase-price" th:text="${#numbers.formatDecimal(articolo.prezzoAcquisto,1,'POINT',2,'COMMA') + ' €'}"></p>
+                <p th:text="${articolo.disponibilitaVendita > 0 ? 'Disponibili: ' + articolo.disponibilitaVendita : 'Articolo esaurito per l’acquisto'}"></p>
+                <form class="purchase-form" method="post" th:action="@{/carrello/aggiungi}">
+                    <input type="hidden" name="attrezzaturaId" th:value="${articolo.id}">
+                    <div>
+                        <label for="purchase-quantity">Quantità</label>
+                        <input id="purchase-quantity" type="number" name="quantita" value="1" min="1"
+                               th:max="${articolo.disponibilitaVendita > 0 ? articolo.disponibilitaVendita : 1}"
+                               th:disabled="${articolo.disponibilitaVendita <= 0}" required>
+                    </div>
+                    <button class="primary-button" type="submit" th:disabled="${articolo.disponibilitaVendita <= 0}">Aggiungi al Carrello</button>
+                </form>
+            </div>
+            <div class="rental-panel">
+                <h2>Noleggio in sessione</h2>
+                <p><strong th:text="${#numbers.formatDecimal(articolo.prezzoNoleggioSessione,1,'POINT',2,'COMMA') + ' €'}"></strong> / sessione</p>
+                <p th:text="${articolo.disponibilitaNoleggio > 0 ? 'Disponibili per noleggio: ' + articolo.disponibilitaNoleggio : 'Attualmente non disponibile per noleggio'}"></p>
+                <a class="detail-link" th:href="@{/prenotazioni}">Vuoi solo noleggiarlo per una partita? Prenota una sessione con noleggio</a>
+            </div>
+            <aside class="associated-partner" aria-labelledby="associated-title">
+                <h2 id="associated-title">Partner Associato</h2>
+                <th:block th:if="${articolo.partner != null}">
+                    <a class="partner-name" th:href="@{/partner/{id}(id=${articolo.partner.id})}" th:text="${articolo.partner.nome}"></a>
+                    <p th:text="${articolo.partner.descrizione}"></p>
+                    <a class="detail-link" th:href="@{/partner/{id}#eventi(id=${articolo.partner.id})}">Scopri gli eventi del partner</a>
+                </th:block>
+                <p th:if="${articolo.partner == null}">Nessun partner associato a questa attrezzatura.</p>
+            </aside>
+        </section>
+    </div>
+    <section id="eventi" class="discovery-section" aria-labelledby="events-title">
+        <h2 id="events-title">Il partner sul campo</h2>
+        <div th:replace="~{partner-eventi :: eventi(${eventi})}"></div>
+    </section>
+</main>
+<script th:replace="~{catalogo :: pageScripts}"></script>
+</body>
+</html>

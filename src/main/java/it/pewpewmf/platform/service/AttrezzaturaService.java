@@ -6,6 +6,8 @@ import it.pewpewmf.platform.model.enums.ZonaCorpo;
 import it.pewpewmf.platform.repository.AttrezzaturaRepository;
 import java.util.List;
 import java.util.Locale;
+import java.util.EnumMap;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,15 @@ public class AttrezzaturaService {
 
     public List<Attrezzatura> getCatalogo() {
         return attrezzature.findAll();
+    }
+
+    public Map<ZonaCorpo, List<Attrezzatura>> getAttrezzatureNoleggiabiliPerZona() {
+        List<Attrezzatura> disponibili = attrezzature.findByDisponibilitaNoleggioGreaterThan(0);
+        Map<ZonaCorpo, List<Attrezzatura>> perZona = new EnumMap<>(ZonaCorpo.class);
+        for (ZonaCorpo zona : ZonaCorpo.values()) {
+            perZona.put(zona, disponibili.stream().filter(a -> a.getZonaCorpo() == zona).toList());
+        }
+        return perZona;
     }
 
     public List<Attrezzatura> getCatalogo(ZonaCorpo zona, Long partnerId, String keyword,

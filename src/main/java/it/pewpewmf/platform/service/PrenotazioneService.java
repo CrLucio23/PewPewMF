@@ -35,6 +35,19 @@ public class PrenotazioneService {
                 .stream().filter(s -> s.getPostiDisponibili() > 0).toList();
     }
 
+    public SessioneGioco getSessioneDisponibile(Long id) {
+        SessioneGioco sessione = sessioni.findById(id)
+                .orElseThrow(() -> new BusinessException("Sessione non trovata"));
+        verificaSessione(sessione);
+        return sessione;
+    }
+
+    @Transactional
+    public Prenotazione creaPrenotazione(Long sessioneId, boolean conNoleggio,
+                                         Collection<Long> attrezzatureIds) {
+        return confermaPrenotazione(sessioneId, conNoleggio, attrezzatureIds);
+    }
+
     public BigDecimal calcolaPreventivo(Long sessioneId, boolean conNoleggio,
                                         Collection<Long> attrezzaturaIds) {
         SessioneGioco sessione = sessioni.findById(sessioneId)
